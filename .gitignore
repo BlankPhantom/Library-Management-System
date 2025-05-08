@@ -3,3 +3,6 @@ venv/
 
 # Ignore settings.py file
 myproject/settings.py
+
+# Ignore database configuration in settings.py
+myproject/settings.py.db_config
