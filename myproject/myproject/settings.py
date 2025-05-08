@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'corsheaders',
     'myapp',
 ]
@@ -81,7 +82,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'librarydb',
         'USER': 'root',
-        'PASSWORD': '',
+        'PASSWORD': 'Cloud5024',
         'HOST': 'localhost',
         'PORT': '3306',
     }
