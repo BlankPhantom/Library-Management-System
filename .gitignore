@@ -1,8 +1,25 @@
-# Ignore virtual environment folder
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Virtual environments
 venv/
+env/
 
-# Ignore settings.py file
-myproject/settings.py
+# Django stuff
+*.log
+*.pot
+*.pyc
+db.mysql
+media/
+staticfiles/
 
-# Ignore database configuration in settings.py
-myproject/settings.py.db_config
+# VS Code settings
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
