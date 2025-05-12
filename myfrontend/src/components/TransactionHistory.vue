@@ -55,6 +55,37 @@ export default {
 </script>
 
 <style scoped>
-.table { width: 100%; border-collapse: collapse; }
-.table th, .table td { padding: 8px; border: 1px solid #ddd; text-align: left; }
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+  font-size: 14px;
+  background-color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table thead {
+  background-color: #f1f5f9;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.table th, .table td {
+  padding: 12px 14px;
+  border: 1px solid #e2e8f0;
+  text-align: left;
+  color: #000000;
+}
+
+.table tbody tr:nth-child(even) {
+  background-color: #f9fbfd;
+}
+
+.table tbody tr:hover {
+  background-color: #eef3fb;
+  transition: background 0.3s ease;
+}
+
 </style>

@@ -61,51 +61,73 @@ export default {
 .container {
   max-width: 1000px;
   margin: 2rem auto;
-  background: #fff;
-  padding: 2rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  border-radius: 10px;
+  background: #fdfdfd;
+  padding: 2.5rem 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  border: 1px solid #e0e0e0;
 }
 
 .title {
   text-align: center;
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: bold;
-  color: #2c3e50;
-  margin-bottom: 1.5rem;
+  color: #1a237e;
+  margin-bottom: 2rem;
+  letter-spacing: 0.5px;
 }
 
+/* Tab Header */
 .tab-header {
   display: flex;
   justify-content: center;
   list-style: none;
   padding: 0;
-  margin: 0 0 1.5rem 0;
-  border-bottom: 2px solid #ccc;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #e0e0e0;
 }
 
 .tab-header li {
-  margin: 0 1rem;
-  padding: 0.75rem 1.5rem;
+  padding: 0.75rem 2rem;
+  margin: 0 0.5rem;
   cursor: pointer;
   font-weight: 500;
+  font-size: 16px;
   color: #555;
   border-bottom: 3px solid transparent;
-  transition: all 0.3s ease;
+  border-radius: 6px 6px 0 0;
+  transition: all 0.25s ease;
 }
 
 .tab-header li:hover {
+  background-color: #f0f4ff;
   color: #1a73e8;
 }
 
 .tab-header li.active {
   border-bottom: 3px solid #1a73e8;
+  background-color: #e8f0fe;
   color: #1a73e8;
   font-weight: 600;
 }
 
+/* Tab Content */
 .tab-content {
-  margin-top: 1rem;
+  margin-top: 2rem;
+  animation: fadeIn 0.3s ease;
 }
+
+/* Smooth transition */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 </style>

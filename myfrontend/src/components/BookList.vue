@@ -1,20 +1,36 @@
 <template>
   <div class="p-4">
-    <h2 class="text-xl font-bold mb-4">Book Management</h2>
+    <h2 class="section-title">📖 Book Management</h2>
 
     <!-- Add/Edit Form -->
     <form @submit.prevent="submitBook" class="form-inline">
       <input v-model="form.title" placeholder="Title" required class="input" />
       <input v-model="form.author" placeholder="Author" required class="input" />
-      <input v-model="form.isbn_number" placeholder="ISBN" required class="input" maxlength="13" @input="limitIsbn" />
-      <input v-model.number="form.copies_available" placeholder="Copies" required class="input" type="number" min="1" />
+      <input
+        v-model="form.isbn_number"
+        placeholder="ISBN (13 digits)"
+        required
+        class="input"
+        maxlength="13"
+        inputmode="numeric"
+        pattern="[0-9]*"
+        @input="filterIsbnInput"
+      />
+      <input
+        v-model.number="form.copies_available"
+        placeholder="Copies"
+        required
+        class="input"
+        type="number"
+        min="1"
+      />
       <button type="submit" class="btn">{{ editing ? 'Update' : 'Add' }}</button>
     </form>
 
     <!-- Book Table -->
     <table class="table mt-4">
       <thead>
-        <tr><th>Title</th><th>Author</th><th>ISBN</th><th>Copies</th><th>Actions</th></tr>
+        <tr><th>TITLE</th><th>AUTHOR</th><th>ISBN</th><th>COPIES</th><th>ACTIONS</th></tr>
       </thead>
       <tbody>
         <tr v-for="book in books" :key="book.id">
@@ -50,7 +66,7 @@
     <div v-if="showModal" class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container">
-          <h3 class="modal-title">Delete Not Allowed</h3>
+          <h3 class="modal-title">Error</h3>
           <div class="modal-body">
             <p>{{ modalMessage }}</p>
           </div>
@@ -97,6 +113,10 @@ export default {
         this.showModalWith('Copies must be at least 1.');
         return;
       }
+      if (!/^\d{13}$/.test(this.form.isbn_number)) {
+        this.showModalWith('ISBN must be exactly 13 numeric digits.');
+        return;
+      }
 
       try {
         if (this.editing) {
@@ -109,6 +129,9 @@ export default {
       } catch (error) {
         this.showModalWith('Failed to save book.');
       }
+    },
+    filterIsbnInput(e) {
+      this.form.isbn_number = e.target.value.replace(/\D/g, '').slice(0, 13);
     },
     editBook(book) {
       this.form = { ...book };
@@ -138,16 +161,11 @@ export default {
       this.form = { id: null, title: '', author: '', isbn_number: '', copies_available: 1 };
       this.editing = false;
     },
-    limitIsbn() {
-      if (this.form.isbn_number.length > 13) {
-        this.form.isbn_number = this.form.isbn_number.slice(0, 13);
-      }
-    },
     showModalWith(message) {
       this.modalMessage = message;
       this.showModal = true;
     }
-  },
+  }
 };
 </script>
 
@@ -155,68 +173,91 @@ export default {
 .form-inline {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
+
 .form-inline .input {
-  flex: 1 1 150px;
-  min-width: 120px;
+  flex: 1 1 180px;
+  min-width: 150px;
+  padding: 10px;
+  border: 1px solid #cbd5e0;
+  border-radius: 8px;
+  font-size: 15px;
+  background-color: #f9f9f9;
+  transition: border 0.3s;
 }
+
+.form-inline .input:focus {
+  outline: none;
+  border-color: #4c9aff;
+  box-shadow: 0 0 0 3px rgba(76, 154, 255, 0.2);
+}
+
 .form-inline .btn {
-  flex-shrink: 0;
-  margin: 0;
+  padding: 10px 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  font-size: 14px;
   height: 100%;
 }
-.input {
-  margin: 8px 0;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  width: 100%;
-  font-size: 14px;
-}
-.btn {
-  margin: 4px 4px 4px 0;
-  padding: 8px 14px;
-  background-color: #2c7be5;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-.btn:hover {
-  background-color: #1a5edb;
-}
-.btn.danger {
-  background-color: #dc3545;
-}
-.btn.danger:hover {
-  background-color: #b02a37;
-}
+
+/* Table */
 .table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
+  margin-top: 24px;
   font-size: 14px;
 }
-.table th, .table td {
-  padding: 10px;
-  border: 1px solid #ddd;
+
+.table td > .btn {
+  margin-right: 6px;
+}
+
+.table th,
+.table td {
+  padding: 12px 10px;
+  border: 1px solid #e2e8f0;
   text-align: left;
 }
+
 .table thead {
-  background-color: #f8f9fa;
+  background-color: #f1f5f9;
 }
+
 .table tbody tr:nth-child(even) {
-  background-color: #f4f7fb;
+  background-color: #f9fbfd;
 }
+
 .table tbody tr:hover {
-  background-color: #e9f0fb;
+  background-color: #eef3fb;
 }
-/* Modal Styles */
+
+/* Buttons */
+.btn {
+  background-color: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 9px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #2563eb;
+}
+
+.btn.danger {
+  background-color: #ef4444;
+}
+
+.btn.danger:hover {
+  background-color: #dc2626;
+}
+
+/* Modal */
 .modal-mask {
   position: fixed;
   z-index: 9998;
@@ -230,63 +271,69 @@ export default {
   justify-content: center;
   animation: fadeIn 0.3s ease-out;
 }
+
 .modal-wrapper {
-  width: 100%;
-  max-width: 400px;
+  max-width: 420px;
+  width: 90%;
   padding: 20px;
 }
+
 .modal-container {
   background-color: #fff;
-  border-radius: 10px;
-  padding: 24px 20px;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   animation: slideUp 0.3s ease-out;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
 }
+
 .modal-title {
   font-size: 20px;
   font-weight: 600;
-  color: #2c3e50;
-  margin-bottom: 6px;
-  border-bottom: 1px solid #eaeaea;
+  color: #1e293b;
+  border-bottom: 1px solid #e2e8f0;
   padding-bottom: 8px;
+  margin-bottom: 12px;
 }
+
 .modal-body {
   font-size: 15px;
-  color: #444;
-  line-height: 1.4;
+  color: #374151;
+  margin-bottom: 16px;
 }
+
 .modal-footer {
   display: flex;
   justify-content: flex-end;
-  margin-top: 10px;
+  gap: 8px;
 }
+
 .modal-footer .btn {
-  padding: 8px 14px;
-  background-color: #3498db;
-  border-radius: 6px;
+  font-size: 14px;
   font-weight: 500;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  transition: background 0.3s ease;
+  padding: 8px 16px;
+  border-radius: 6px;
 }
-.modal-footer .btn:hover {
-  background-color: #2a7bbd;
+
+.modal-footer .btn.danger {
+  background-color: #ef4444;
 }
+
+.modal-footer .btn.danger:hover {
+  background-color: #dc2626;
+}
+
 /* Animations */
 @keyframes slideUp {
   from {
     opacity: 0;
-    transform: translateY(20px) scale(0.98);
+    transform: translateY(20px) scale(0.97);
   }
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
 }
+
 @keyframes fadeIn {
   from {
     background-color: rgba(30, 30, 30, 0);
@@ -295,4 +342,14 @@ export default {
     background-color: rgba(30, 30, 30, 0.5);
   }
 }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a237e;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 0.5rem;
+}
+
 </style>

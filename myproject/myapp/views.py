@@ -52,11 +52,15 @@ def borrow_book(request):
 # Return a Book
 @api_view(['POST'])
 def return_book(request, borrow_id):
-    transaction = get_object_or_404(BorrowTransaction, id=borrow_id)
+    try:
+        transaction = BorrowTransaction.objects.get(id=borrow_id)
+    except BorrowTransaction.DoesNotExist:
+        return Response({'error': 'Transaction ID not found'}, status=status.HTTP_404_NOT_FOUND)
 
     if transaction.status == 'returned':
         return Response({'error': 'Book already returned'}, status=status.HTTP_400_BAD_REQUEST)
 
+    # Process return
     transaction.status = 'returned'
     transaction.return_date = now()
     transaction.save()
