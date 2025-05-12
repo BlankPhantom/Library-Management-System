@@ -4,9 +4,9 @@
 
     <form @submit.prevent="borrowBook" class="form-inline">
       <!-- User Dropdown -->
-      <select v-model="form.user_id" required class="input">
+      <select v-model="form.user" required class="input">
         <option disabled value="">Select User</option>
-        <option v-for="u in users" :key="u.id" :value="u.id">{{ u.username }}</option>
+        <option v-for="u in users" :key="u.id" :value="u.username">{{ u.username }}</option>
       </select>
 
       <!-- Book Dropdown -->
@@ -33,7 +33,7 @@ import axios from '../axios';
 export default {
   data() {
     return {
-      form: { user_id: '', book_id: '' },
+      form: { user: '', book_id: '' },
       users: [
         { id: 1, username: 'alice' },
         { id: 2, username: 'bob' },
@@ -65,7 +65,7 @@ export default {
       try {
         await axios.post('borrow/', this.form);
         alert('✅ Borrow successful!');
-        this.form = { user_id: '', book_id: '' };
+        this.form = { user: '', book_id: '' };
         this.fetchBooks();
         this.$emit('borrowed'); 
       } catch (error) {

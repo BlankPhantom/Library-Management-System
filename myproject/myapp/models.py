@@ -17,7 +17,7 @@ class BorrowTransaction(models.Model):
         ('returned', 'Returned'),
     ]
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)  
+    user = models.CharField(max_length=100)  
     book = models.ForeignKey('Book', on_delete=models.CASCADE)
     borrow_date = models.DateTimeField(auto_now_add=True)
     return_date = models.DateTimeField(null=True, blank=True)

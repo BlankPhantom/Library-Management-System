@@ -34,7 +34,7 @@ def transaction_list(request):
 @api_view(['POST'])
 def borrow_book(request):
     book_id = request.data.get('book_id')
-    user_id = request.data.get('user_id')
+    user = request.data.get('user')
 
     book = get_object_or_404(Book, id=book_id)
 
@@ -44,7 +44,7 @@ def borrow_book(request):
     book.copies_available -= 1
     book.save()
 
-    transaction = BorrowTransaction.objects.create(book_id=book_id, user_id=user_id)
+    transaction = BorrowTransaction.objects.create(book_id=book_id, user=user)
     serializer = BorrowTransactionSerializer(transaction)
     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
