@@ -11,6 +11,17 @@ class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
 
+    def destroy(self, request, *args, **kwargs):
+        book = self.get_object()
+        active_borrowers = BorrowTransaction.objects.filter(book=book, status='borrowed').exists()
+        
+        if active_borrowers:
+            return Response(
+                {'error': f'Cannot delete "{book.title}" because it is still borrowed.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        return super().destroy(request, *args, **kwargs)
+
 # View all Borrow Transactions
 @api_view(['GET'])
 def transaction_list(request):
